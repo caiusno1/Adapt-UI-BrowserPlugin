@@ -1,0 +1,32 @@
+{
+  "name": "AdaptUI",
+  "version": "0.3",
+  "description": "An adaptive UI browser plugin",
+  "permissions": ["activeTab", "declarativeContent", "storage",
+    "tabs",
+    "notifications",
+    "http://*/**",
+    "https://*/**"
+],
+  "options_page": "options.html",
+  "background": {
+    "scripts": ["adaptations.js","contextOfUse.js","background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/**","http://*/**", "file:///**"],
+      "js": ["/libs/jquery-ui/external/jquery/jquery.js","adaptations.js","adaptationOperations.js","contextOfUse.js","contentScript.js"]
+    }
+  ],
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "images/icon.png"
+    }
+  },
+  "icons": {
+    "128": "images/icon.png"
+  },
+  "manifest_version": 2
+}
