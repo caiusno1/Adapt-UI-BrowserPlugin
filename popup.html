@@ -3,26 +3,31 @@
   <head>
     <style>
     </style>
+    <link rel="stylesheet" href="/libs/jquery.mobile/jquery.mobile-1.4.5.min.css" />
+    <script src="/libs/jquery.mobile/jquery-1.11.1.min.js"></script>
   </head>
-  <body>
-    <table border="0">
-      <thead>
-        <tr>
-          <td>Status</td>
-          <td>ContextProperty</td>
-          <td>Operator</td>
-          <td>Value</td>
-          <td>Adaptation</td>
-          <td>Operations</td>
-        </tr>
-      </thead>
-      <tbody id="adaptationViewBody">
-      </tbody>
-    </table>
-    <button id="nightTest">Toogle Night</button>
-    <button id="lightTest">Toogle Light</button>
-    <button id="pagePull">Pull PageIDs</button>
-    <div id="postLoad">
+  <body data-role="page">
+    <div data-role="header">Controll</div>
+      <div class="ui-content">
+      <table border="0">
+        <thead>
+          <tr>
+            <td>Status</td>
+            <td>ContextProperty</td>
+            <td>Operator</td>
+            <td>Value</td>
+            <td>Adaptation</td>
+            <td>Operations</td>
+          </tr>
+        </thead>
+        <tbody id="adaptationViewBody">
+        </tbody>
+      </table>
+      <button id="nightTest">Toogle Night</button>
+      <button id="lightTest">Toogle Light</button>
+      <button id="pagePull">Pull PageIDs</button>
+    </div>
+    <div id="postLoad" data-role="footer">
         <script src="popup.js"></script>
     </div>
   </body>

@@ -2,7 +2,10 @@ var adaptationOperations = {
     "nightMode":
     function nightMode(){
         document.body.style.backgroundColor = "black";
-        document.querySelector(".card:not(:empty), .mnr-c:not(:empty)").style.backgroundColor = "black";
+        var cards = document.querySelector(".card:not(:empty), .mnr-c:not(:empty)");
+        if(cards){
+            card.style.backgroundColor = "black";
+        }
         document.body.style.filter = "invert(100%)";
         for(var img of document.getElementsByTagName("img")){
           img.style.filter = "invert(1)";

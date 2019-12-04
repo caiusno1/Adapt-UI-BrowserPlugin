@@ -1,6 +1,6 @@
 {
   "name": "AdaptUI",
-  "version": "0.3",
+  "version": "0.31",
   "description": "An adaptive UI browser plugin",
   "permissions": ["activeTab", "declarativeContent", "storage",
     "tabs",

@@ -185,22 +185,19 @@ setInterval(function(){
     chrome.storage.sync.set({contextOfUse:contextOfUse});
   },1000*60)
 
-  window.addEventListener (" devicemotion ", event => {
-    console.log("Consider motion")
-    var x = event.accelerationIncludingGravity .x;
-    var y = event.accelerationIncludingGravity .y;
-    var z = event.accelerationIncludingGravity .z;
-    var w = y+z+x;
-    var accelerationAvg = this.accelerationAvg *24;
-    if(w > 14 || w < 8.5) {
-        accelerationAvg += 100;
-    }
-    accelerationAvg = this . accelerationAvg /25;
-    if( this . accelerationAvg >= 1){
+  window.addEventListener ("devicemotion", event => {
+    var x = event.acceleration.x;
+    var y = event.acceleration.y;
+    var z = event.acceleration.z;
+    var accelerationAvg = Math.sqrt(x^2+y^2+z^2);
+
+    if( accelerationAvg >= 6){
         contextOfUse.environmentContext.activity=2
+        alert("in vehicle");
     }
-    else if( this . accelerationAvg >= 0.5) {
-        contextOfUse.environmentContext.activity=1
+    else if( accelerationAvg >=3.5) {
+        contextOfUse.environmentContext.activity=1;
+        alert("on the move");
     }
     else {
         contextOfUse.environmentContext.activity = 0;

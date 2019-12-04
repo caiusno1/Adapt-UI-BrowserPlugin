@@ -55,6 +55,20 @@ var adaptationsView = document.getElementById("adaptationViewBody");
 
 var body = document.body;
 
+var head = document.getElementsByTagName('head')[0];
+
+var mobile = false;
+if (screen.width < 500)
+{
+  var js2 = document.createElement("script");
+  
+  js2.type = "text/javascript";
+  js2.src = "/libs/jquery.mobile/jquery.mobile-1.4.5.min.js"
+  mobile = true;
+  head.appendChild(js2);
+}
+
+
 chrome.storage.sync.get('adaptations', function(data) {
   if(!data.adaptations){
     data.adaptations={};
@@ -74,11 +88,16 @@ chrome.storage.sync.get('adaptations', function(data) {
     var checkboxtype = document.createAttribute("type");
     checkboxtype.value="checkbox";
     checkbox.setAttributeNode(checkboxtype);
+
+    var datarole = document.createAttribute("data-role");
+    datarole.value="flipswitch";
+    //checkbox.setAttributeNode(datarole);
+
     tdcheckbox.appendChild(checkbox);
     if(adaptation.enabled){
       checkbox.checked = adaptation.enabled;
     }
-    checkbox.addEventListener('click',onAdaptationiActivationChange(i));
+    $(checkbox).click(onAdaptationiActivationChange(i));
 
     var contextPropertyField = document.createElement("input");
     var fieldtype = document.createAttribute("type");
@@ -164,6 +183,7 @@ lightTest.addEventListener('click',()=>{
       chrome.storage.sync.set({contextOfUse:data.contextOfUse});
     });
 });
+
 var pullPageIdsBt = document.getElementById('pagePull');
 pullPageIdsBt.addEventListener('click',()=>{
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
