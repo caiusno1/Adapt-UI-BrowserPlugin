@@ -1,3 +1,8 @@
+function textNodesUnder(el){
+    var n, a=[], walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+    while(n=walk.nextNode()) a.push(n);
+    return a;
+}
 var adaptationOperations = {
     "nightMode":
     function nightMode(){
@@ -30,5 +35,25 @@ var adaptationOperations = {
     "blackWhiteMode":
     function blackWhiteMode(){
         document.body.style.filter = "grayscale(1)";
+    },
+    "modalityChange":
+    function blackWhiteMode(){
+        var readOutBtn = document.createElement("button"); 
+        readOutBtn.innerText="read out"
+        readOutBtn.addEventListener("click",() => {
+            if( 'speechSynthesis' in window){
+                const synth =  (window).speechSynthesis;
+                const content  = document.body;
+                const allTextNodes=textNodesUnder(content);
+                const utterThis = new SpeechSynthesisUtterance(
+                allTextNodes.map((textnode)=>
+                    textnode.textContent ? textnode.textContent : textnode.innerText)
+                );
+                synth.speak(utterThis);
+            } else{
+                alert('Read is not supportet in your browser');
+            }
+        });
+        document.body.appendChild(readOutBtn);
     }
 }

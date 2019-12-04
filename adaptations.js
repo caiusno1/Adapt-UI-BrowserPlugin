@@ -41,8 +41,8 @@ var adaptationRules = [
         "active":false,
         "condition":
             {
-                "operator":"<",
-                "operant1":"light",
+                "operator":">",
+                "operant1":"age",
                 "operant2":"50"
             },
         "action":"greaterFontSize"
@@ -70,5 +70,17 @@ var adaptationRules = [
                 "operant2":"50"
             },
         "action":"blackWhiteMode"
+    },
+    {
+        "name":"modalityChange",
+        "enabled":true,
+        "active":false,
+        "condition":
+            {
+                "operator":">=",
+                "operant1":"activity",
+                "operant2":"1"
+            },
+        "action":"modalityChange"
     }
   ];

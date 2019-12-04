@@ -58,9 +58,10 @@ var body = document.body;
 var head = document.getElementsByTagName('head')[0];
 
 var mobile = false;
+var js2 = null;
 if (screen.width < 500)
 {
-  var js2 = document.createElement("script");
+  js2 = document.createElement("script");
   
   js2.type = "text/javascript";
   js2.src = "/libs/jquery.mobile/jquery.mobile-1.4.5.min.js"
@@ -91,19 +92,34 @@ chrome.storage.sync.get('adaptations', function(data) {
 
     var datarole = document.createAttribute("data-role");
     datarole.value="flipswitch";
-    //checkbox.setAttributeNode(datarole);
+    checkbox.setAttributeNode(datarole);
 
     tdcheckbox.appendChild(checkbox);
     if(adaptation.enabled){
       checkbox.checked = adaptation.enabled;
     }
     $(checkbox).click(onAdaptationiActivationChange(i));
-
-    var contextPropertyField = document.createElement("input");
-    var fieldtype = document.createAttribute("type");
-    fieldtype.value="text";
-    contextPropertyField.setAttributeNode(fieldtype);
-    contextPropertyField.value = adaptation.condition.operant1;
+    if(mobile){
+      // use "currying" to create function for checkbox and index
+      // otherwise checkbox and index will be overwritten because of asynchronicity
+      $( document ).on( "mobileinit", ((checkbox,i) => () =>
+        $(checkbox).change(onAdaptationiActivationChange(i)
+      ))(checkbox,i));
+    }
+    var contextProperties = ["time","light","age"];
+    var contextPropertyField = document.createElement("select");
+    for(var contextPropEl of contextProperties){
+      var optionCtxProp = document.createElement("option");
+      var valueOpt = document.createAttribute("value");
+      valueOpt.value=contextPropEl;
+      optionCtxProp.setAttributeNode(valueOpt);
+      optionCtxProp.innerText = contextPropEl;
+      if(contextPropEl == adaptation.condition.operant1){
+        var selectedProp = document.createAttribute("selected");
+        optionCtxProp.setAttributeNode(selectedProp);
+      }
+      contextPropertyField.appendChild(optionCtxProp);
+    }
     tdproperty.appendChild(contextPropertyField);
 
     var operatorField = document.createElement("select");
