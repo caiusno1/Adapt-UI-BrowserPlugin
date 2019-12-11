@@ -5,6 +5,7 @@
     </style>
     <link rel="stylesheet" href="/libs/jquery.mobile/jquery.mobile-1.4.5.min.css" />
     <script src="/libs/jquery.mobile/jquery-1.11.1.min.js"></script>
+    <script src="contextOfUse.js"></script>
   </head>
   <body data-role="page">
     <div data-role="header">Controll</div>
@@ -13,11 +14,11 @@
         <thead>
           <tr>
             <td>Status</td>
-            <td>ContextProperty</td>
-            <td>Operator</td>
-            <td>Value</td>
+            <td class="hideOnSmallScreen">ContextProperty</td>
+            <td class="hideOnSmallScreen">Operator</td>
+            <td class="hideOnSmallScreen">Value</td>
             <td>Adaptation</td>
-            <td>Operations</td>
+            <td class="hideOnSmallScreen">Operations</td>
           </tr>
         </thead>
         <tbody id="adaptationViewBody">
@@ -26,6 +27,7 @@
       <button id="nightTest">Toogle Night</button>
       <button id="lightTest">Toogle Light</button>
       <button id="pagePull">Pull PageIDs</button>
+      <button id="optionsBtn">Options</button>
     </div>
     <div id="postLoad" data-role="footer">
         <script src="popup.js"></script>

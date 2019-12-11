@@ -51,6 +51,14 @@ function onContextChange(context){
     chrome.storage.sync.set({ adaptation1Status: value });
   });
 }
+
+function getContextProps(){
+  return []
+  .concat(Object.getOwnPropertyNames(contextOfUse.environmentContext))
+  .concat(Object.getOwnPropertyNames(contextOfUse.userContext))
+  .concat(Object.getOwnPropertyNames(contextOfUse.platformContext));
+}
+
 var adaptationsView = document.getElementById("adaptationViewBody");
 
 var body = document.body;
@@ -80,10 +88,14 @@ chrome.storage.sync.get('adaptations', function(data) {
     var adaptationTR = document.createElement("tr");
     var tdcheckbox = document.createElement("td");
     var tdproperty = document.createElement("td");
+    tdproperty.classList.add("hideOnSmallScreen");
     var tdoperator = document.createElement("td");
+    tdoperator.classList.add("hideOnSmallScreen");
     var tdValue = document.createElement("td");
+    tdValue.classList.add("hideOnSmallScreen");
     var tdMode = document.createElement("td");
     var tdSubmitButton = document.createElement("td");
+    tdSubmitButton.classList.add("hideOnSmallScreen");
 
     var checkbox = document.createElement("input");
     var checkboxtype = document.createAttribute("type");
@@ -106,7 +118,8 @@ chrome.storage.sync.get('adaptations', function(data) {
         $(checkbox).change(onAdaptationiActivationChange(i)
       ))(checkbox,i));
     }
-    var contextProperties = ["time","light","age"];
+
+    var contextProperties = getContextProps();
     var contextPropertyField = document.createElement("select");
     for(var contextPropEl of contextProperties){
       var optionCtxProp = document.createElement("option");
@@ -175,6 +188,20 @@ chrome.storage.sync.get('adaptations', function(data) {
     adaptationsView.appendChild(adaptationTR);
     i++;
   }
+  $(window).on("orientationchange", (event) => {
+    var orientation = window.orientation;
+    if(Math.abs(orientation) == 90){
+      $(".hideOnSmallScreen").show();
+    } else {
+      $(".hideOnSmallScreen").hide();
+    }
+  });
+
+  if(Math.abs(orientation) == 90){
+    $(".hideOnSmallScreen").show();
+  } else {
+    $(".hideOnSmallScreen").hide();
+  }
 
   var nightTestButton = document.getElementById('nightTest');
   nightTestButton.addEventListener('click',()=>{
@@ -198,6 +225,11 @@ lightTest.addEventListener('click',()=>{
       }
       chrome.storage.sync.set({contextOfUse:data.contextOfUse});
     });
+});
+
+var optionsBtn = document.getElementById('optionsBtn');
+optionsBtn.addEventListener('click',()=>{
+  chrome.tabs.create({'url': "/options.html" } );
 });
 
 var pullPageIdsBt = document.getElementById('pagePull');

@@ -17,7 +17,7 @@ var adaptationRules = [
         "active":false,
         "condition":
             {
-                "operator":">",
+                "operator":">=",
                 "operant1":"light",
                 "operant2":"50"
             },
@@ -29,9 +29,9 @@ var adaptationRules = [
         "active":false,
         "condition":
             {
-                "operator":"<",
+                "operator":"<=",
                 "operant1":"light",
-                "operant2":"50"
+                "operant2":"10"
             },
         "action":"lowAmbientLight"
     },
@@ -82,5 +82,17 @@ var adaptationRules = [
                 "operant2":"1"
             },
         "action":"modalityChange"
+    },
+    {
+        "name":"navGrid",
+        "enabled":true,
+        "active":false,
+        "condition":
+            {
+                "operator":">=",
+                "operant1":"activity",
+                "operant2":"1"
+            },
+        "action":"navGrid"
     }
   ];

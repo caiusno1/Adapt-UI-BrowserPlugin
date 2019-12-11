@@ -11,24 +11,37 @@
       </style>
   </head>
   <body style="overflow: auto;">
-    <div>
-      <h1>User options</h1>
-        Age:<input type="number" id="userAge"/></br>
-        Gender:
-        <select id="userGender">
-          <option value="male">male</option>
-          <option value="female">female</option>
-          <option value="diverse">diverse</option>
-        </select>
-        </br>
-        <button id="saveUserData">Save Information</button>
+    <div data-role="page">
+      <h1 data-role="header">User options</h1>
+      <div class="ui-content">
+        <table>
+          <tr>
+            <td>Age:</td>
+            <td><input type="number" id="userAge"/></td>
+          </tr>
+          <tr>
+            <td>Gender:</td>
+            <td><select id="userGender">
+              <option value="male">male</option>
+              <option value="female">female</option>
+              <option value="diverse">diverse</option>
+            </select></td>
+          </tr>
+          <tr>
+            <td>Color-blindness:</td>
+            <td><input type="checkbox" id="colorBlindness"></td>
+          </tr>
+        </table>
+        <button id="#saveUserData">Save UserData</button>
+      </div>
+      <div data-role="footer"></div>
     </div>
-    <div>
+    <div id="customAdaptationPanel">
       <h1>Custom Adaptations</h1>
       <ul style="background: blue;">
-        <li class="dragableOp ui-widget-content">fontSize</li>
-        <li class="dragableOp ui-widget-content">background</li>
-        <li class="dragableOp ui-widget-content">fontColor</li>
+        <li class="dragableOp ui-widget-content" style='list-style:none;'>fontSize</li>
+        <li class="dragableOp ui-widget-content" style='list-style:none;'>background</li>
+        <li class="dragableOp ui-widget-content" style='list-style:none;'>fontColor</li>
       </ul>
       <div id="idListTop" style="clear: both;">
         <ul style="background: yellow;" id="idList">

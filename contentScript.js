@@ -1,4 +1,5 @@
-
+var motionAVG = 0;
+var motionMeasureCount = 0;
 // Helpers
 function toogleAdaptation(adaptationRule){
     adaptationRule.enabled = (!adaptationRule.enabled);
@@ -26,6 +27,9 @@ function getGender(){
 function getDeviceType(){
     return contextOfUse.platformContext.deviceType;
 }
+function getActivity(){
+    return contextOfUse.environmentContext.activity;
+}
 
 function try2apply(){
     console.log("adaptation cycle");
@@ -36,6 +40,9 @@ function try2apply(){
             switch(rule.condition.operant1){
                 case "time":
                     operant1=getTime();
+                    break;
+                case "activity":
+                    operant1=getActivity();
                     break;
                 case "light":
                     operant1=getLight();
@@ -85,22 +92,24 @@ function try2apply(){
                 } else {
                     var actionName = rule.action;
                     chrome.storage.sync.get('customOperations', function(data){
-                        if(actionName in data.customOperations){
-                            var op = data.customOperations[actionName];
-                            for(var supOp of op.suboperations){
-                                switch(supOp.name){
-                                    case "fontSize":
-                                        $(supOp.targets).css("font-size",supOp.value);
-                                        console.log("execute fontsize");
-                                        break;
-                                    case "fontColor":
-                                        $(supOp.targets).css("color",supOp.value);
-                                        console.log("execute fontsize");
-                                        break;
-                                    case "background":
-                                        $(supOp.targets).css("background",supOp.value);
-                                        console.log("execute fontsize");
-                                        break;
+                        if(data.customOperations) {
+                            if(actionName in data.customOperations){
+                                var op = data.customOperations[actionName];
+                                for(var supOp of op.suboperations){
+                                    switch(supOp.name){
+                                        case "fontSize":
+                                            $(supOp.targets).css("font-size",supOp.value);
+                                            console.log("execute fontsize");
+                                            break;
+                                        case "fontColor":
+                                            $(supOp.targets).css("color",supOp.value);
+                                            console.log("execute fontsize");
+                                            break;
+                                        case "background":
+                                            $(supOp.targets).css("background",supOp.value);
+                                            console.log("execute fontsize");
+                                            break;
+                                    }
                                 }
                             }
                         }
@@ -179,34 +188,41 @@ setInterval(function(){
     contextOfUse.platformContext.screenWidth = window.innerWidth;
     contextOfUse.platformContext.screenHeight = window.innerHeight;
 
-    
+    console.log("motionAVG: "+motionAVG);
 
+    if( motionAVG >= 6){
+        contextOfUse.environmentContext.activity = 2
+    }
+    else if( motionAVG >=1.5) {
+        contextOfUse.environmentContext.activity = 1;
+    }
+    else if(motionAVG < 1.5) {
+        contextOfUse.environmentContext.activity = 0;
+    } else {
+        if(!contextOfUse.environmentContext.activity){
+            contextOfUse.environmentContext.activity = 0;
+        }
+    }
+    motionAVG = 0;
+    motionMeasureCount = 0;
 
     chrome.storage.sync.set({contextOfUse:contextOfUse});
-  },1000*60)
+  },1000*30)
 
   window.addEventListener ("devicemotion", event => {
     var x = event.acceleration.x;
     var y = event.acceleration.y;
     var z = event.acceleration.z;
     var accelerationAvg = Math.sqrt(x^2+y^2+z^2);
-
-    if( accelerationAvg >= 6){
-        contextOfUse.environmentContext.activity=2
-        alert("in vehicle");
-    }
-    else if( accelerationAvg >=3.5) {
-        contextOfUse.environmentContext.activity=1;
-        alert("on the move");
-    }
-    else {
-        contextOfUse.environmentContext.activity = 0;
+    if(!Number.isNaN(accelerationAvg)){
+        motionAVG=((motionAVG*motionMeasureCount)+accelerationAvg)/(motionMeasureCount+1);
+        motionMeasureCount=motionMeasureCount+1;
     }
 });
 if ('AmbientLightSensor' in window) {
     const ambientLightSensor = new AmbientLightSensor();
     ambientLightSensor.addEventListener('reading', function(event){
-        contextOfUse.environmentContext.light = Math.max(0,Math.min(100,(event.target.illuminance)/11));
+        contextOfUse.environmentContext.light = Math.max(0,Math.min(100,(event.target.illuminance)/10));
     });
     ambientLightSensor.start();
   } else {
